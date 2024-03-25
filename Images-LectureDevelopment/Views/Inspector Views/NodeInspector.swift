@@ -11,11 +11,7 @@ struct NodeInspector: View {
     var nodes: [Node]
     
     var body: some View {
-        VStack {
-            nodeNameEditor()
-            imageNumber()
-        }
-        
+        nodeNameEditor()
     }
 }
 
@@ -33,25 +29,35 @@ extension NodeInspector {
     
     @ViewBuilder
     private func emptyNodesEditor() -> some View {
-        Text("No Groups Selected.  Select a Group from the sidebar")
-            .lineLimit(nil)
+        VStack(alignment: .center) {
+            Text("No Groups Selected")
+            Text("Select a Group from the sidebar")
+        }
     }
     
     @ViewBuilder
     private func oneNodeEditor() -> some View {
         if let editableNode = nodes.first {
             @Bindable var bindableNode = editableNode
-            HStack {
-                Text("Name:")
-                TextField("Name", text: $bindableNode.name)
+            VStack {
+                HStack {
+                    Text("Name")
+                    TextField("Name", text: $bindableNode.name)
+                }
+                imageNumber()
             }
+            
         } else { EmptyView() }
     }
     
+    
     @ViewBuilder
     private func multipleNodeEditor() -> some View {
-        Text("\(nodes.count) Groups selected. Cannot edit multiple Groups")
-            .lineLimit(nil)
+        VStack {
+            Text("\(nodes.count) Groups selected")
+            Text("Cannot edit multiple Groups")
+            imageNumber()
+        }
     }
 }
 
@@ -65,7 +71,7 @@ extension NodeInspector {
             current + node.flattenedImageItems().count
         } )
         
-        let imageCountString = nodeCount.spelledOut?.capitalized ?? String(imageCount)
+        let imageCountString = String(imageCount)
         let imageString = "Image".pluralize(imageCount)
         let nodeString = "in selected " + "Group".pluralize(nodeCount)
         let output = imageCountString + " " + imageString + " " + nodeString

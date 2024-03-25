@@ -41,7 +41,8 @@ struct ContentView: View {
                  ItemsTable(items: dataModel.visableItems, selectionManager: appController.selectionManager)
              }
              .inspector(isPresented: $visibility_inspector) {
-                 InspectorView()
+                 // ADD
+                 InspectorView(dataModel: dataModel)
                      .toolbar() {
                          ToolbarItem(id: "inspector") {
                              Button {

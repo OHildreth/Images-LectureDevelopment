@@ -8,18 +8,22 @@
 import SwiftUI
 
 struct InspectorView: View {
+    
+    // ADD
+    var dataModel: DataModel
+    
     @State private var visible = true
     
     var body: some View {
         TabView {
-            Text("Node Inspector")
+            NodeInspector(nodes: dataModel.selectedNodes)
                 .tabItem { Text("􀈕") }
-            Text("Image Inspector")
+            ImageItemInspector(imageItems: dataModel.selectedImageItems)
                 .tabItem { Text("􀏅") }
         }
     }
 }
 
 #Preview {
-    InspectorView()
+    InspectorView(dataModel: DataModel())
 }
