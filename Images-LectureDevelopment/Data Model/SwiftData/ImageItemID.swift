@@ -6,3 +6,21 @@
 //
 
 import Foundation
+import SwiftData
+
+/*
+ @Model
+ final class ImageItemID: Identifiable {
+     var id: UUID
+     
+     
+     @Relationship
+     var imageItem: ImageItem?
+     
+     init(imageItem: ImageItem?) {
+         self.id = UUID()
+         self.imageItem = imageItem
+     }
+ }
+ */
+

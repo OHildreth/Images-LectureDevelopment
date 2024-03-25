@@ -25,11 +25,8 @@ class DataModel {
     
     // This is temporary and used to make the visibleItems a computed property
     // TODO: Remove when visibleItems transitioned to stored property that is updated manually
-    @Transient
     var selectedNodes: [Node] = []
     
-    // @Transient is used to tell SwiftData that this property should not be stored
-    @Transient
     var visableItems: [ImageItem] {
         
         // For initial simplicity, we will make this a computed property
@@ -39,6 +36,8 @@ class DataModel {
             // Make this an OrderedSet to ensure that items aren't duplicated
             var items: OrderedSet<ImageItem> = []
             
+            
+            // U
             for nextNode in selectedNodes {
                 items.append(contentsOf: nextNode.flattenedImageItems())
             }
@@ -47,6 +46,15 @@ class DataModel {
             return Array(items)
         }
     }
+    
+    // ADD
+    var selectedImageItemIDs: [ImageItem.ID] = [] {
+        didSet {
+            updateImageItems()
+        }
+    }
+    
+    var selectedImageItems: [ImageItem] = []
     
     
     init() {
@@ -81,5 +89,15 @@ class DataModel {
         } catch {
             print("Fetch failed")
         }
+    }
+    
+    // ADD
+    // MARK: - Filtering Selected ImageItems
+    func updateImageItems() {
+        let ids = selectedImageItemIDs
+        let items = self.visableItems
+        let filteredItems = items.filter({ids.contains([$0.id])})
+        
+        selectedImageItems = filteredItems
     }
 }

@@ -12,12 +12,39 @@ import Foundation
 // MARK: - Importing URLs
 
 extension DataModel {
-    // UPDATE
-    func importDirectory(_ url: URL, intoNode parentNode: Node?) {
+    
+    func importURLs(_ urls: [URL], intoNode parentNode: Node?) throws  {
+        // No need to do anything if there aren't any URLs in the array
+        if urls.isEmpty {throw ImportError.noURLsToImport}
         
-        // modelContext is no longer optional.
-        // REMOVE
-        // guard let localModelContext = modelContext else {return}
+        // Import Files first because we want to exit scope if the user is trying to import a
+        let files = urls.filter( { !$0.isDirectory})
+        
+        // NOTE: importing files without a parentNode isn't allowed.  Files need to be stored somewhere.
+        // NOTE: Currently we will throw an error.  One way to fix this would be to create a default Node automatically for the User.  However, this is complex to do correctly, for example, what if you make a default Node called "Home", but that a Node called "Home" already exists.  Should you put the files in the existing "Home" node? or make another "Home" node, or a new node called "Home 2"?  Making decisions for the User is difficult and should not be done lightly.
+        if files.count != 0 && parentNode == nil {
+            throw ImportError.cannotImportFileWithoutANode
+        }
+        
+        // Notice that we are using an if let to unwrap the optional parentNode instead of a guard let.  This is because we have already checked that the state is correct above and we don't want to exit the function because directories can be imported without a parentNode.
+        if let parentNode {
+            for nextFile in files {
+                importFile(nextFile, intoNode: parentNode)
+            }
+        }
+        
+        
+        let directories = urls.filter( { $0.isDirectory } )
+        
+        for nextDirectory in directories {
+            importDirectory(nextDirectory, intoNode: parentNode)
+        }
+        
+        fetchData()
+    }
+    
+    // UPDATE to private
+    private func importDirectory(_ url: URL, intoNode parentNode: Node?) {
         
         // Check that url exists and is a director
         let fm = FileManager.default
@@ -41,13 +68,8 @@ extension DataModel {
         // Create Node and Insert into context
         let newNode = Node(withURL: url, parentNode)
         
-        // UPDATE
-        // localModelContext.insert(newNode)
         modelContext.insert(newNode)
         
-        // Adding node as subnode to parent node
-        // Unwrap parentNode so that the existence of the parentNode's subNode array can be probed
-        // Create subNode array if needed and then append self as a subNode.
         if let parentNode {
             if parentNode.subNodes != nil {
                 parentNode.subNodes?.append(newNode)
@@ -91,14 +113,12 @@ extension DataModel {
             self.importDirectory(nextDirectory, intoNode: newNode)
         }
         
-        // ADD
-        fetchData()
-
+        // REMOVE
+        // fetchData()
     }
     
-    
-    // UPDATE
-    func importFile(_ url: URL, intoNode parentNode: Node) {
+    // UPDATE to private
+    private func importFile(_ url: URL, intoNode parentNode: Node) {
         
         // modelContext is no longer optional.
         // REMOVE
@@ -140,3 +160,6 @@ extension DataModel {
         newItem.node = parentNode
     }
 }
+
+
+

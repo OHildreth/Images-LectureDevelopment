@@ -9,31 +9,55 @@ import SwiftUI
 import SwiftData
 
 struct SourceList: View {
-    @Binding var nodes: [Node]
+    var dataModel: DataModel
     
-    // Update
-    // Notice that we are using the @Bindable macro to make the passed in selectionManager variable bindable
     @Bindable var selectionManager: SelectionManager
     
+    // ADD
+    @State private var showingAlert = false
     
     var body: some View {
-        // UPDATE to use selectionManager
         List(selection: $selectionManager.selectedNodes) {
-            
-
-            OutlineGroup($nodes, id: \.self, children: \.subNodes) { $nextNode in
+            // UPDATE and REMOVE bindings
+            OutlineGroup(dataModel.rootNodes, id: \.self, children: \.subNodes) { nextNode in
                 HStack {
                     Image(systemName: "folder.fill")
                         .foregroundStyle(.secondary)
-                    TextField("Name", text: $nextNode.name)
-                    
-                    // REMOVE
-                    // Text(nextNode.parent?.name ?? "No Parent")
-                    //  Text("\(nextNode.subNodes?.count ?? 0)")
+                    Text(nextNode.name)
+                }
+                .dropDestination(for: URL.self) { urls, _  in
+                    importURLs(urls, intoNode: nextNode)
+                    return true
+                }
+                .alert(isPresented: $showingAlert) { importAlert }
+            }
+        }
+        .dropDestination(for: URL.self) { urls, _  in
+            importURLs(urls, intoNode: nil)
+            return true
+        }
+        .alert(isPresented: $showingAlert) { importAlert }
+        
+    }
+    
+    // ADD
+    private func importURLs(_ urls: [URL], intoNode parentNode: Node?) {
+        do {
+            try dataModel.importURLs(urls, intoNode: parentNode)
+        } catch {
+            if let importError = error as? DataModel.ImportError {
+                if importError == .cannotImportFileWithoutANode {
+                    self.showingAlert = true
                 }
             }
         }
     }
+    
+    // ADD
+    private var importAlert: Alert {
+        Alert(title: Text("Import Error"), message: Text("Image Files must be imported into an existing group"))
+    }
+    
 }
 
 

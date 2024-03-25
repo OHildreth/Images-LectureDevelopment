@@ -10,43 +10,50 @@ import SwiftData
 
 struct ContentView: View {
     
-    // REMOVE
-    //@Environment(\.modelContext) private var modelContext
-    
-    // REMOVE
-    // @State var dataModel = DataModel()
-    
-    // ADD
     @Environment(AppController.self) private var appController: AppController
     
-    var dataModel: DataModel {
-        appController.dataModel
-    }
+    // ADD
+    @State private var visibility_sourceList: NavigationSplitViewVisibility = .all
+    @State private var visibility_inspector = true
+
+    var dataModel: DataModel { appController.dataModel }
     
     var body: some View {
-        // ADD
-        // We need a bindable version of dataModel.  This is how the new Observation macros create bindable values if you don't have direct access to the original @State of @Environment macro created objects
         @Bindable var dataModel = appController.dataModel
         
          VStack {
-             HStack {
-                 importButton
-                 
-                 // UPDATE to use dataModel
-                 Text("Root Nodes: \(dataModel.rootNodes.count)")
-             }
-             .padding()
+             //REMOVE
+             /*
+              HStack {
+                  importButton
+                  Text("Root Nodes: \(dataModel.rootNodes.count)")
+              }
+              .padding()
+              
+              Divider()
+              */
              
-             Divider()
-             
-             HSplitView {
-                 SourceList(nodes: $dataModel.rootNodes, selectionManager: appController.selectionManager)
-                     .frame(minHeight: 200, maxHeight: .infinity)
-                 
-                 // UPDATE to use visibleItems
-                 ItemsTable(items: dataModel.visableItems)
-                     .frame(minHeight: 200, maxHeight: .infinity)
+            
+             NavigationSplitView(columnVisibility: $visibility_sourceList) {
+                 // UPDATE
+                 SourceList(dataModel: dataModel, selectionManager: appController.selectionManager)
+             } detail: {
+                 ItemsTable(items: dataModel.visableItems, selectionManager: appController.selectionManager)
              }
+             .inspector(isPresented: $visibility_inspector) {
+                 InspectorView()
+                     .toolbar() {
+                         ToolbarItem(id: "inspector") {
+                             Button {
+                                 visibility_inspector.toggle()
+                             } label: {
+                                 Image(systemName: "sidebar.right")
+                             }
+                         }
+                         
+                     }
+             }
+             .navigationSplitViewStyle(.prominentDetail)
          }
         .onAppear() {
             // This will automatically clear the modelContext so that we have a clean slate each time we run the application.
@@ -56,28 +63,36 @@ struct ContentView: View {
             try? dataModel.modelContext.delete(model: ImageItem.self)
             #endif
         }
+        .navigationTitle("")
     }
     
     
-    
-    // UPDATE
-    @ViewBuilder
-    var importButton:  some View {
-        Button("Select URL") {
-            let panel = NSOpenPanel()
-            panel.canChooseFiles = false
-            panel.canChooseDirectories = true
-            panel.allowsMultipleSelection = false
-            
-            if panel.runModal() == .OK {
-                if let url = panel.url {
-                    // UPDATE to use dataModel
-                    dataModel.importDirectory(url, intoNode: nil)
-                }
-            }
-            
-        }
-    }
+    // REMOVE
+    /*
+     @ViewBuilder
+     var importButton:  some View {
+         Button("Select URL") {
+             let panel = NSOpenPanel()
+             panel.canChooseFiles = false
+             panel.canChooseDirectories = true
+             panel.allowsMultipleSelection = false
+             
+             if panel.runModal() == .OK {
+                 do {
+                     let urls = panel.urls
+                     try dataModel.importURLs(urls, intoNode: nil)
+                 } catch {
+                     if let importError = error as? DataModel.ImportError {
+                         if importError == .cannotImportFileWithoutANode {
+                             Alert(title: Text("Import Error"), message: Text("Image Files must be imported into an existing group"))
+                         }
+                     }
+                 }
+             }
+             
+         }
+     }
+     */
 }
 
 #Preview {

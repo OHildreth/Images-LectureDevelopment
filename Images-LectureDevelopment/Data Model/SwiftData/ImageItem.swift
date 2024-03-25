@@ -18,6 +18,7 @@ final class ImageItem: Identifiable {
     
     var node: Node?
     
+
     init(url: URL) {
         self.id = UUID()
         self.url = url

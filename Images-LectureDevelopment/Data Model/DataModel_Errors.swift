@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+
+extension DataModel {
+    enum ImportError: Error {
+        case cannotImportFileWithoutANode
+        case noURLsToImport
+    }
+}
