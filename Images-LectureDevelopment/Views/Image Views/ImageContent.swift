@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct ImageContent: View {
+    @Environment(AppController.self) private var appController: AppController
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VSplitView {
+            ItemsTable(items: appController.dataModel.visableItems, selectionManager: appController.selectionManager)
+            ImageDetailList(imageItems: appController.dataModel.selectedImageItems)
+        }
     }
 }
 

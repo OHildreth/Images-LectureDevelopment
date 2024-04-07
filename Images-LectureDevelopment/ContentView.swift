@@ -22,23 +22,14 @@ struct ContentView: View {
         @Bindable var dataModel = appController.dataModel
         
          VStack {
-             //REMOVE
-             /*
-              HStack {
-                  importButton
-                  Text("Root Nodes: \(dataModel.rootNodes.count)")
-              }
-              .padding()
-              
-              Divider()
-              */
-             
-            
              NavigationSplitView(columnVisibility: $visibility_sourceList) {
-                 // UPDATE
                  SourceList(dataModel: dataModel, selectionManager: appController.selectionManager)
              } detail: {
-                 ItemsTable(items: dataModel.visableItems, selectionManager: appController.selectionManager)
+                 // REMOVE
+                 // ItemsTable(items: dataModel.visableItems, selectionManager: appController.selectionManager)
+                 
+                 // ADD
+                 ImageContent()
              }
              .inspector(isPresented: $visibility_inspector) {
                  // ADD

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct InspectorView: View {
     
-    // ADD
     var dataModel: DataModel
     
     @State private var visible = true

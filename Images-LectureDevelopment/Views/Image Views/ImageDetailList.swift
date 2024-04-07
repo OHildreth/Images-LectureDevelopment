@@ -8,10 +8,25 @@
 import SwiftUI
 
 struct ImageDetailList: View {
+    
+    var imageItems: [ImageItem] = []
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView(.horizontal) {
+            ForEach(imageItems, id: \.id) { nextItem in
+                if let image = NSImage(contentsOf: nextItem.url) {
+                    Image(nsImage: image)
+                        .resizable()
+                        .scaledToFill()
+                } else {
+                    Text("\(nextItem.name) could not be found")
+                }
+            }
+        }
     }
 }
+
+
 
 #Preview {
     ImageDetailList()
