@@ -13,7 +13,9 @@ struct ImageContent: View {
     var body: some View {
         VSplitView {
             ItemsTable(items: appController.dataModel.visableItems, selectionManager: appController.selectionManager)
+                .frame(minHeight: 100, maxHeight: .infinity)
             ImageDetailList(imageItems: appController.dataModel.selectedImageItems)
+                .frame(minHeight: 100, maxHeight: .infinity)
         }
     }
 }

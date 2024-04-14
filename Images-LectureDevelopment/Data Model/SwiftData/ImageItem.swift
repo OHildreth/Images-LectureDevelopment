@@ -10,6 +10,7 @@ import SwiftData
 
 @Model
 final class ImageItem: Identifiable {
+    
     var id: UUID
     
     var name: String
@@ -35,5 +36,11 @@ final class ImageItem: Identifiable {
         }
         
         return resourceValues
+    }
+}
+
+extension ImageItem: Comparable {
+    static func < (lhs: ImageItem, rhs: ImageItem) -> Bool {
+        lhs.name < rhs.name
     }
 }

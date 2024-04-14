@@ -17,7 +17,10 @@ struct Preferences: View {
     
     var body: some View {
         
-        List($preferencesController.allowedImageFileExtensions, id: \.id, editActions: [.delete, .move], selection: $selection) { $nextExtension in
+        List($preferencesController.allowedImageFileExtensions, 
+             id: \.id,
+             editActions: [.delete, .move],
+             selection: $selection) { $nextExtension in
             HStack {
                 Text("􀏅")
                 TextField("", text: $nextExtension.fileExtension)

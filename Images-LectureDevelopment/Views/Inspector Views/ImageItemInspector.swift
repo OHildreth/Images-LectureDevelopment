@@ -81,13 +81,13 @@ extension ImageItemInspector {
     private func singleFileInfo() -> some View {
         if let item = imageItems.first {
             VStack(alignment: .leading) {
-                let fileSize = (item.fileSize ?? 0)
-                let fileSizeString = formatedFileSize(fileSize)
+                //let fileSize = (item.fileSize)
+                let fileSizeString = item.scaledFileSize
                 
                 Text("File Size: \(fileSizeString) MB")
-                let creationDateString = item.creationDate?.formatted() ?? "N/A"
+                let creationDateString = item.creationDate.formatted(date: .numeric, time: .omitted)
                 Text("Creation Date: \(creationDateString)")
-                let modifedDateString = item.contentModificationDate?.formatted() ?? "N/A"
+                let modifedDateString = item.contentModificationDate.formatted(date: .numeric, time: .omitted)
                 Text("Last Modified: \(modifedDateString)")
             }
         } else {

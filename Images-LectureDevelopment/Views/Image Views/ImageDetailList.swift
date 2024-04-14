@@ -13,13 +13,15 @@ struct ImageDetailList: View {
     
     var body: some View {
         ScrollView(.horizontal) {
-            ForEach(imageItems, id: \.id) { nextItem in
-                if let image = NSImage(contentsOf: nextItem.url) {
-                    Image(nsImage: image)
-                        .resizable()
-                        .scaledToFill()
-                } else {
-                    Text("\(nextItem.name) could not be found")
+            LazyHStack {
+                ForEach(imageItems, id: \.id) { nextItem in
+                    if let image = NSImage(contentsOf: nextItem.url) {
+                        Image(nsImage: image)
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        Text("\(nextItem.name) could not be found")
+                    }
                 }
             }
         }

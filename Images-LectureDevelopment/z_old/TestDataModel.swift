@@ -30,7 +30,7 @@ class TestDataModel {
     init() {
         let sharedModelContainer: ModelContainer = {
             let schema = Schema([
-                Item.self, Node.self, ImageItem.self
+                Node.self, ImageItem.self
             ])
             let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
