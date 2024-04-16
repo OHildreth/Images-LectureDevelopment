@@ -9,23 +9,32 @@ import SwiftUI
 import SwiftData
 
 struct ItemsTable: View {
-    var items: [ImageItem]
     
-    @Bindable var selectionManager: SelectionManager
+    // REMOVE
+    //var items: [ImageItem]
     
-    // ADD
-    @State private var sortOrder = [KeyPathComparator(\ImageItem.name)]
+    // REMOVE
+    //@Bindable var selectionManager: SelectionManager
+    
+    // REMOVE
+    //@State private var sortOrder = [KeyPathComparator(\ImageItem.name)]
+    
+    @Bindable var imageContentVM: ImageContentViewModel
+    
+    
     
     var body: some View {
-        // UPDATE
-        Table(items, selection: $selectionManager.selectedImageItemIDs, sortOrder: $sortOrder) {
+        // UPDATE in 3 places
+        Table(imageContentVM.imageItems,
+              selection: $imageContentVM.selection, 
+              sortOrder: $imageContentVM.sort) {
             TableColumn("Name", value: \.name)
             
-            // ADD
+
             TableColumn("Folder", value: \.nodeName)
-            // ADD
-            // NOTE: This will fail if value: exist without adding a sortOrder
-            TableColumn("File Size", value: \.fileSize) {              Text($0.scaledFileSize)
+  
+            TableColumn("File Size", value: \.fileSize) {              
+                Text($0.scaledFileSize)
             }
             
             TableColumn("Creation Date", value: \.creationDate) {

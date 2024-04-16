@@ -75,6 +75,8 @@ class DataModel {
         
         modelContext = ModelContext(sharedModelContainer)
         
+        fetchData()
+        
     }
     
     

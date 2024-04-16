@@ -14,10 +14,23 @@ class AppController {
     var dataModel: DataModel
     var selectionManager: SelectionManager
     
+    // ADD
+    var imageContentViewModel: ImageContentViewModel
+    
     init() {
-        dataModel = DataModel()
-        selectionManager = SelectionManager()
-        selectionManager.delegate = self
+        // UPDATE
+        
+        let localDataModel = DataModel()
+        let localSelectionManager = SelectionManager()
+        
+        dataModel = localDataModel
+        selectionManager = localSelectionManager
+        
+        
+        imageContentViewModel = ImageContentViewModel(dataModel: localDataModel, selectionManager: localSelectionManager)
+        
+        // Accessing self must be done after all variables are initialized
+        localSelectionManager.delegate = self
     }
     
 }

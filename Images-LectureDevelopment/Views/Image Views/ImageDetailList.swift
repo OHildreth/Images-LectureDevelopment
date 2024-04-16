@@ -13,6 +13,7 @@ struct ImageDetailList: View {
     
     var body: some View {
         ScrollView(.horizontal) {
+            
             LazyHStack {
                 ForEach(imageItems, id: \.id) { nextItem in
                     if let image = NSImage(contentsOf: nextItem.url) {
@@ -25,6 +26,8 @@ struct ImageDetailList: View {
                 }
             }
         }
+        .frame(minHeight: 300, maxHeight: .infinity)
+        
     }
 }
 

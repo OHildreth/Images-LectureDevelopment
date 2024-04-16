@@ -18,6 +18,10 @@ struct ContentView: View {
 
     var dataModel: DataModel { appController.dataModel }
     
+    #if DEBUG
+    var deleteData = false
+    #endif
+    
     var body: some View {
         @Bindable var dataModel = appController.dataModel
         
@@ -50,9 +54,11 @@ struct ContentView: View {
         .onAppear() {
             // This will automatically clear the modelContext so that we have a clean slate each time we run the application.
             #if DEBUG
-            // UPDATE to use dataModel
-            try? dataModel.modelContext.delete(model: Node.self)
-            try? dataModel.modelContext.delete(model: ImageItem.self)
+            if deleteData == true {
+                try? dataModel.modelContext.delete(model: Node.self)
+                try? dataModel.modelContext.delete(model: ImageItem.self)
+            }
+            
             #endif
         }
         .navigationTitle("")

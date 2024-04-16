@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class ImageItem: Identifiable {
+final class ImageItem: Identifiable, Hashable {
     
     var id: UUID
     

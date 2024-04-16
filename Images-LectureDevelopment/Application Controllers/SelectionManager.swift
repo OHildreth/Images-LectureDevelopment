@@ -25,10 +25,7 @@ class SelectionManager {
 }
 
 
-protocol SelectionManagerDelegate {
 
-    func selectedNodesDidChange(_ nodes: Set<Node>)
-    
-    // UPDATE to use ImageItem.ID
-    func selectedImageItemsDidChange(_ imageItemsIDs: Set<ImageItem.ID>)
-}
+
+
+

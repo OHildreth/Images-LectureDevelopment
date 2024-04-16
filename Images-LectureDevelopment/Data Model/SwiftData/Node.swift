@@ -13,7 +13,7 @@ import SwiftData
 // https://www.hackingwithswift.com/quick-start/swiftdata/how-to-create-one-to-many-relationships
 
 @Model
-final class Node: Identifiable {
+final class Node: Identifiable, Hashable {
     var id: UUID
     
     var name: String
