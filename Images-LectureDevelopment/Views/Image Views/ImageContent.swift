@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct ImageContent: View {
-    @Environment(AppController.self) private var appController: AppController
+    //REMOVE
+    //@Environment(AppController.self) private var appController: AppController
+    
+    // ADD
+    @Bindable var imageContentVM: ImageContentViewModel
     
     @AppStorage("imageContentViewState") var imageContentViewState: ImageContentViewState = .table
     
@@ -16,19 +20,29 @@ struct ImageContent: View {
         VSplitView {
             // UPDATE
             itemsViews
-                
-                        
-            ImageDetailList(imageItems: appController.dataModel.selectedImageItems)
+                .dropDestination(for: URL.self) { urls, _ in
+                    imageContentVM.importURLs(urls)
+                }
+            // ADD
+                .alert(isPresented: $imageContentVM.presentURLImportError, content: { dragAndDropAlert })
+            
+            ImageDetailList(imageItems: imageContentVM.selectedImageItems)
                 .frame(maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
         }
         .toolbar {
-            ToolbarItem(id: "ImagesViewSelection", placement: .principal) {
-                Picker("Images", selection: $imageContentViewState) {
-                    ForEach(ImageContentViewState.allCases) { state in
-                        Image(systemName: state.systemName)
-                    }
-                }.pickerStyle(.inline)
-            }
+            //  REPLACE
+            /*
+             ToolbarItem(id: "ImagesViewSelection", placement: .principal) {
+                 Picker("Images", selection: $imageContentViewState) {
+                     ForEach(ImageContentViewState.allCases) { state in
+                         Image(systemName: state.systemName)
+                     }
+                 }.pickerStyle(.inline)
+             }
+             */
+            
+            // ADD
+            imageSelectionToolbarItem
         }
 
     }
@@ -37,18 +51,36 @@ struct ImageContent: View {
     var itemsViews: some View {
         switch imageContentViewState {
         case .table:
-            ItemsTable(imageContentVM: appController.imageContentViewModel)
+            ItemsTable(imageContentVM: imageContentVM)
                 .frame(maxWidth: .infinity, minHeight: 300, maxHeight: .infinity)
         case .list:
-            ItemsList(imageContentVM: appController.imageContentViewModel)
+            ItemsList(imageContentVM: imageContentVM)
                 .frame(maxWidth: .infinity, minHeight: 300, maxHeight: .infinity)
         case .grid:
-            ImageGrid(imageContentVM: appController.imageContentViewModel)
+            ImageGrid(imageContentVM: imageContentVM)
                 .frame(maxWidth: .infinity, minHeight: 300, maxHeight: .infinity)
         }
     }
+    
+    // ADD
+    @ToolbarContentBuilder
+    var imageSelectionToolbarItem:  some ToolbarContent {
+        ToolbarItem(id: "ImagesViewSelection", placement: .principal) {
+            Picker("Images", selection: $imageContentViewState) {
+                ForEach(ImageContentViewState.allCases) { state in
+                    Image(systemName: state.systemName)
+                }
+            }.pickerStyle(.inline)
+        }
+    }
+    
+    // ADD
+    var dragAndDropAlert: Alert {
+        Alert(title: Text("Import Error"), message: Text("Image Files must be imported into an existing group"))
+    }
+    
 }
 
 #Preview {
-    ImageContent()
+    ImageContent(imageContentVM: ImageContentViewModel(dataModel: DataModel(withDelegate: nil), selectionManager: SelectionManager()))
 }

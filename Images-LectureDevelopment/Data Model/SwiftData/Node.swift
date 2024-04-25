@@ -39,9 +39,11 @@ final class Node: Identifiable, Hashable {
     /// This needs to be a stored property because we can't search against nil in an @Query's predicate.  Since we can't search that parent == nil during the @Query's predicate, we will store this value as a nodetype.
     var nodeType: Int
     
-    init(_ name: String, _ parent: Node?) {
+    // UPDATE.  Make name optional and use default Name
+    init(_ name: String?, _ parent: Node?) {
         self.id = UUID()
-        self.name = name
+         // UPDATE
+        self.name = name ?? Node.defaultName
         self.parent = parent
         self.items = []
         self.subNodes = []
@@ -94,3 +96,7 @@ final class Node: Identifiable, Hashable {
  }
  */
 
+// ADD
+extension Node {
+    static let defaultName = "New Node"
+}

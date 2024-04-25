@@ -17,22 +17,36 @@ class AppController {
     // ADD
     var imageContentViewModel: ImageContentViewModel
     
+    var sourceListViewModel: SourceListViewModel
+    
     init() {
-        // UPDATE
         
-        let localDataModel = DataModel()
+        let localDataModel = DataModel(withDelegate: nil)
+        
         let localSelectionManager = SelectionManager()
         
         dataModel = localDataModel
         selectionManager = localSelectionManager
-        
-        
+
         imageContentViewModel = ImageContentViewModel(dataModel: localDataModel, selectionManager: localSelectionManager)
+        
+        // ADD
+        sourceListViewModel = SourceListViewModel(dataModel: localDataModel, selectionManager: localSelectionManager)
         
         // Accessing self must be done after all variables are initialized
         localSelectionManager.delegate = self
+        
+        localDataModel.delegate = self
     }
     
+}
+
+// ADD
+extension AppController: DataModelDelegate {
+    func newData(nodes: [Node], andImages imageItems: [ImageItem]) {
+        // Pass the information down to the Selection Manager because the selectionManager is responsible for knowing how selection state should be udpated
+        selectionManager.newData(nodes: nodes, andImages: imageItems)
+    }
 }
 
 

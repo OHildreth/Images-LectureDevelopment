@@ -28,6 +28,15 @@ class ImageContentViewModel {
         visibleItems()
     }
     
+    // ADD
+    var selectedImageItems: [ImageItem] {
+        dataModel.selectedImageItems
+    }
+    
+    // ADD
+    var presentURLImportError = false
+    
+    
     var sort: [KeyPathComparator<ImageItem>] = [.init(\.name), .init(\.nodeName)]
     
     
@@ -48,9 +57,11 @@ class ImageContentViewModel {
         
         return Array(items).sorted(using: sort)
     }
-    
-    
-    // MARK: - Drag and Drop
+}
+
+// ADD
+// MARK: - Drag and Drop
+extension ImageContentViewModel {
     func shouldAllowDrop(ofURLs urls: [URL]) -> Bool {
         
         if urls.count == 0 { return false }
@@ -63,6 +74,25 @@ class ImageContentViewModel {
         default: return false
         }
     }
+    
+    // ADD
+    func importURLs(_ urls: [URL]) -> Bool {
+        
+        if shouldAllowDrop(ofURLs: urls) == false {
+            self.presentURLImportError = true
+            return false
+        }
+        
+        guard let parentNode = selectionManager.selectedNodes.first else {return false}
+        
+        do {
+            try dataModel.importURLs(urls, intoNode: parentNode)
+            return true
+        } catch {
+            self.presentURLImportError = true
+            return false
+        }
+    }
 }
 
 
@@ -73,8 +103,6 @@ extension ImageContentViewModel {
     }
     
     func imageTappedWithModifiers(_ item: ImageItem, modifiers: EventModifiers) {
-                
-        
         if modifiers.contains([.control, .command, .shift]) {
             if selectionManager.selectedImageItemIDs.contains(item.id) {
                 selection.remove(item.id)
@@ -86,23 +114,10 @@ extension ImageContentViewModel {
             selection = Set(arrayLiteral: item.id)
         }
         
-        /*
-         if modifiers.contains([.control, .command, .shift]) {
-             if selectionManager.selectedImageItemIDs.contains(item.id) {
-                 selectionManager.selectedImageItemIDs.remove(item.id)
-             } else {
-                 selectionManager.selectedImageItemIDs.insert(item.id)
-             }
-             
-             return
-         }
-         */
-        
-        
         
     }
     
-    func itemSelectionState(_ item: ImageItem) -> Bool {
+    func itemIsSelected(_ item: ImageItem) -> Bool {
         selectionManager.selectedImageItemIDs.contains(item.id) ? true : false
     }
 }

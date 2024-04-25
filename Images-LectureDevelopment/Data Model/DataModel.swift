@@ -18,6 +18,9 @@ class DataModel {
     
     var modelContext: ModelContext
     
+    // ADD
+    var delegate: DataModelDelegate?
+    
     var rootNodes: [Node] = []
     
     var sortNodesKeyPaths: [KeyPathComparator<Node>] = [
@@ -47,7 +50,7 @@ class DataModel {
         }
     }
     
-    // ADD
+
     var selectedImageItemIDs: [ImageItem.ID] = [] {
         didSet {
             updateImageItems()
@@ -56,8 +59,8 @@ class DataModel {
     
     var selectedImageItems: [ImageItem] = []
     
-    
-    init() {
+    // UPDATE
+    init(withDelegate delegate: DataModelDelegate?) {
         let sharedModelContainer: ModelContainer = {
             let schema = Schema([
                 Node.self, ImageItem.self
@@ -74,6 +77,9 @@ class DataModel {
         container = sharedModelContainer
         
         modelContext = ModelContext(sharedModelContainer)
+        
+        // ADD
+        self.delegate = delegate
         
         fetchData()
         
@@ -101,5 +107,27 @@ class DataModel {
         let filteredItems = items.filter({ids.contains([$0.id])})
         
         selectedImageItems = filteredItems
+    }
+    
+    
+    // MARK: - Delete Nodes
+    func delete(_ nodes: [Node]) {
+        for nextNode in nodes {
+            modelContext.delete(nextNode)
+        }
+        try? modelContext.save()
+        
+        fetchData()
+    }
+    
+    // MARK: - Adding Nodes
+    func createEmptyNode(withParent parent: Node?) {
+        let newNode = Node("New Folder", parent)
+        
+        modelContext.insert(newNode)
+        
+        delegate?.newData(nodes: [newNode], andImages: [])
+        
+        fetchData()
     }
 }

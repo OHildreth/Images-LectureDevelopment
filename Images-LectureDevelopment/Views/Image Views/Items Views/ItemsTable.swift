@@ -21,7 +21,7 @@ struct ItemsTable: View {
     
     @Bindable var imageContentVM: ImageContentViewModel
     
-    
+    // TODO: Add Delete
     
     var body: some View {
         // UPDATE in 3 places

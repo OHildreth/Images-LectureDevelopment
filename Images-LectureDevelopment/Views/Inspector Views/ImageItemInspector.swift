@@ -83,12 +83,29 @@ extension ImageItemInspector {
             VStack(alignment: .leading) {
                 //let fileSize = (item.fileSize)
                 let fileSizeString = item.scaledFileSize
+                Form() {
+                    
+                    HStack {
+                        Text("File Size:")
+                        Spacer()
+                        Text(fileSizeString)
+                    }
+                    HStack {
+                        let creationDateString = item.creationDate.formatted(date: .numeric, time: .omitted)
+                        Text("Creation Date:")
+                        Spacer()
+                        Text(creationDateString)
+                    }
+                    HStack {
+                        let modifedDateString = item.contentModificationDate.formatted(date: .numeric, time: .omitted)
+                        Text("Last Modified:")
+                        Spacer()
+                        Text(modifedDateString)
+                    }
+                }
                 
-                Text("File Size: \(fileSizeString) MB")
-                let creationDateString = item.creationDate.formatted(date: .numeric, time: .omitted)
-                Text("Creation Date: \(creationDateString)")
-                let modifedDateString = item.contentModificationDate.formatted(date: .numeric, time: .omitted)
-                Text("Last Modified: \(modifedDateString)")
+               
+                
             }
         } else {
             EmptyView()

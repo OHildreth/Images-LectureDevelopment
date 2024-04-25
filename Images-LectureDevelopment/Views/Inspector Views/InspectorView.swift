@@ -24,5 +24,5 @@ struct InspectorView: View {
 }
 
 #Preview {
-    InspectorView(dataModel: DataModel())
+    InspectorView(dataModel: DataModel(withDelegate: nil))
 }

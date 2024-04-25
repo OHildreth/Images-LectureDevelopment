@@ -12,10 +12,10 @@ struct ContentView: View {
     
     @Environment(AppController.self) private var appController: AppController
     
-    // ADD
     @State private var visibility_sourceList: NavigationSplitViewVisibility = .all
     @State private var visibility_inspector = true
-
+    
+    
     var dataModel: DataModel { appController.dataModel }
     
     #if DEBUG
@@ -23,20 +23,18 @@ struct ContentView: View {
     #endif
     
     var body: some View {
-        @Bindable var dataModel = appController.dataModel
+        // REMOVE
+        //@Bindable var dataModel = appController.dataModel
         
          VStack {
              NavigationSplitView(columnVisibility: $visibility_sourceList) {
-                 SourceList(dataModel: dataModel, selectionManager: appController.selectionManager)
-             } detail: {
-                 // REMOVE
-                 // ItemsTable(items: dataModel.visableItems, selectionManager: appController.selectionManager)
                  
-                 // ADD
-                 ImageContent()
+                 // UPDATE
+                 SourceList(sourceListVM: appController.sourceListViewModel)
+             } detail: {
+                 ImageContent(imageContentVM: appController.imageContentViewModel)
              }
              .inspector(isPresented: $visibility_inspector) {
-                 // ADD
                  InspectorView(dataModel: dataModel)
                      .toolbar() {
                          ToolbarItem(id: "inspector") {
@@ -63,34 +61,6 @@ struct ContentView: View {
         }
         .navigationTitle("")
     }
-    
-    
-    // REMOVE
-    /*
-     @ViewBuilder
-     var importButton:  some View {
-         Button("Select URL") {
-             let panel = NSOpenPanel()
-             panel.canChooseFiles = false
-             panel.canChooseDirectories = true
-             panel.allowsMultipleSelection = false
-             
-             if panel.runModal() == .OK {
-                 do {
-                     let urls = panel.urls
-                     try dataModel.importURLs(urls, intoNode: nil)
-                 } catch {
-                     if let importError = error as? DataModel.ImportError {
-                         if importError == .cannotImportFileWithoutANode {
-                             Alert(title: Text("Import Error"), message: Text("Image Files must be imported into an existing group"))
-                         }
-                     }
-                 }
-             }
-             
-         }
-     }
-     */
 }
 
 #Preview {
