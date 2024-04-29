@@ -59,7 +59,7 @@ class DataModel {
     
     var selectedImageItems: [ImageItem] = []
     
-    // UPDATE
+    
     init(withDelegate delegate: DataModelDelegate?) {
         let sharedModelContainer: ModelContainer = {
             let schema = Schema([
@@ -78,7 +78,6 @@ class DataModel {
         
         modelContext = ModelContext(sharedModelContainer)
         
-        // ADD
         self.delegate = delegate
         
         fetchData()
@@ -110,15 +109,6 @@ class DataModel {
     }
     
     
-    // MARK: - Delete Nodes
-    func delete(_ nodes: [Node]) {
-        for nextNode in nodes {
-            modelContext.delete(nextNode)
-        }
-        try? modelContext.save()
-        
-        fetchData()
-    }
     
     // MARK: - Adding Nodes
     func createEmptyNode(withParent parent: Node?) {

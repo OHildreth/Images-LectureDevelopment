@@ -12,7 +12,7 @@ import Foundation
 // MARK: - Importing URLs
 extension DataModel {
     
-    // UPDATE to call the DataModelDelegate to let it know how the data model has cahnged
+    // UPDATE to call the DataModelDelegate to let it know how the data model has changed
     func importURLs(_ urls: [URL], intoNode parentNode: Node?) throws  {
         // No need to do anything if there aren't any URLs in the array
         if urls.isEmpty {throw ImportError.noURLsToImport}
@@ -57,7 +57,7 @@ extension DataModel {
         delegate?.newData(nodes: newNodes, andImages: newImageItems)
     }
     
-    // UPDATE to return a Node
+    
     private func importDirectory(_ url: URL, intoNode parentNode: Node?) -> Node? {
         
         // Check that url exists and is a director
@@ -135,7 +135,7 @@ extension DataModel {
         return newNode
     }
     
-    // UPDATE to return an ImageItem
+    
     private func importFile(_ url: URL, intoNode parentNode: Node) -> ImageItem? {
         
         // modelContext is no longer optional.

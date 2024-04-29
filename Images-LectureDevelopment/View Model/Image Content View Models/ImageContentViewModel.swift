@@ -18,10 +18,14 @@ class ImageContentViewModel {
     private var dataModel: DataModel
     private var selectionManager: SelectionManager
     
-    var selection: Set<ImageItem.ID> = [] {
-        didSet {
-            selectionManager.selectedImageItemIDs = selection
-        }
+    var selection: Set<ImageItem.ID> {
+        /*
+         didSet {
+             selectionManager.selectedImageItemIDs = selection
+         }
+         */
+        get { selectionManager.selectedImageItemIDs }
+        set { selectionManager.selectedImageItemIDs = newValue }
     }
     
     var imageItems: [ImageItem] {

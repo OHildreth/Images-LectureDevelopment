@@ -23,7 +23,6 @@ class SelectionManager {
         didSet { delegate?.selectedImageItemsDidChange(selectedImageItemIDs) }
     }
     
-    // ADD
     func newData(nodes: [Node], andImages imageItems: [ImageItem]) {
         
         // A single new node has been added.  Make that the selection
@@ -53,6 +52,12 @@ class SelectionManager {
             
             selectedNodes = completeSelection
         }
+    }
+    
+    // ADD
+    func deselectAll() {
+        selectedImageItemIDs = []
+        selectedNodes = []
     }
 }
 

@@ -14,10 +14,9 @@ class SourceListViewModel {
     private var selectionManager: SelectionManager
     
     
-    var selection: Set<Node> = [] {
-        didSet {
-            selectionManager.selectedNodes = selection
-        }
+    var selection: Set<Node> {
+        get { selectionManager.selectedNodes }
+        set { selectionManager.selectedNodes = newValue }
     }
     
     var rootNodes: [Node] {

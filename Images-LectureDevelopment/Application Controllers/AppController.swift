@@ -14,10 +14,12 @@ class AppController {
     var dataModel: DataModel
     var selectionManager: SelectionManager
     
-    // ADD
     var imageContentViewModel: ImageContentViewModel
     
     var sourceListViewModel: SourceListViewModel
+    
+    // ADD
+    var menuBarViewModel: MenuBarViewModel
     
     init() {
         
@@ -30,8 +32,10 @@ class AppController {
 
         imageContentViewModel = ImageContentViewModel(dataModel: localDataModel, selectionManager: localSelectionManager)
         
-        // ADD
         sourceListViewModel = SourceListViewModel(dataModel: localDataModel, selectionManager: localSelectionManager)
+        
+        // ADD
+        menuBarViewModel = MenuBarViewModel(dataModel: localDataModel, selectionManager: localSelectionManager)
         
         // Accessing self must be done after all variables are initialized
         localSelectionManager.delegate = self
