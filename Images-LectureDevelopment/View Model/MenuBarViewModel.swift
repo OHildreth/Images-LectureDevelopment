@@ -69,14 +69,7 @@ class MenuBarViewModel {
         let imageItemsToDelete = Array(self.dataModel.selectedImageItems)
         let nodesToDelete = Array(self.dataModel.selectedNodes)
         
-        if imageItemsToDelete.count != 0 {
-            dataModel.delete(imageItemsToDelete)
-            return
-        } else if nodesToDelete.count != 0 {
-            dataModel.delete(nodesToDelete)
-        } else {
-            return
-        }
+        dataModel.delete(imageItemsToDelete, andThenTheNodes: nodesToDelete)
     }
     
     var deleteButtonIsDisabled: Bool {

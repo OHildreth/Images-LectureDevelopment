@@ -19,11 +19,6 @@ class ImageContentViewModel {
     private var selectionManager: SelectionManager
     
     var selection: Set<ImageItem.ID> {
-        /*
-         didSet {
-             selectionManager.selectedImageItemIDs = selection
-         }
-         */
         get { selectionManager.selectedImageItemIDs }
         set { selectionManager.selectedImageItemIDs = newValue }
     }
@@ -32,14 +27,9 @@ class ImageContentViewModel {
         visibleItems()
     }
     
-    // ADD
-    var selectedImageItems: [ImageItem] {
-        dataModel.selectedImageItems
-    }
+    var selectedImageItems: [ImageItem] { dataModel.selectedImageItems }
     
-    // ADD
     var presentURLImportError = false
-    
     
     var sort: [KeyPathComparator<ImageItem>] = [.init(\.name), .init(\.nodeName)]
     
@@ -63,7 +53,7 @@ class ImageContentViewModel {
     }
 }
 
-// ADD
+
 // MARK: - Drag and Drop
 extension ImageContentViewModel {
     func shouldAllowDrop(ofURLs urls: [URL]) -> Bool {
@@ -100,6 +90,15 @@ extension ImageContentViewModel {
 }
 
 
+// MARK: - Deleting
+extension ImageContentViewModel {
+    func deleteSelectedImages() {
+        let images = Array(dataModel.selectedImageItems)
+        
+        dataModel.delete(images)
+    }
+}
+
 // MARK: - Handling ImageGrid Selection
 extension ImageContentViewModel {
     func imageItemTapped(_ item: ImageItem) {
@@ -125,3 +124,5 @@ extension ImageContentViewModel {
         selectionManager.selectedImageItemIDs.contains(item.id) ? true : false
     }
 }
+
+

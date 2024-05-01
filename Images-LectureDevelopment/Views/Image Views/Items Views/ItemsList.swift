@@ -7,14 +7,11 @@
 
 
 import SwiftUI
-
-// ADD
 import SwiftData
 
 struct ItemsList: View {
     
     @Bindable var imageContentVM: ImageContentViewModel
-    
     
     var body: some View {
         List(imageContentVM.imageItems, id: \.id, selection: $imageContentVM.selection) { imageItem in
@@ -23,12 +20,11 @@ struct ItemsList: View {
                 AsyncImage(url: imageItem.url) { image in
                     image
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
+                        .aspectRatio(contentMode: .fit)
                 } placeholder: {
                     ProgressView()
                 }
                 .frame(width: 50, height: 75)
-                .clipped()
                 .padding(.trailing)
                 
                 Text(imageItem.name)
@@ -42,7 +38,10 @@ struct ItemsList: View {
                 },
                        label: {Image(systemName: "link")})
             }
-            
+            .contextMenu {
+                Button("Delete") { imageContentVM.deleteSelectedImages() }
+                    .disabled(imageContentVM.selection.count == 0)
+            }
         }
     }
 }

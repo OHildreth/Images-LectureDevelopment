@@ -9,4 +9,10 @@ import Foundation
 
 protocol DataModelDelegate {
     func newData(nodes: [Node], andImages imageItems: [ImageItem])
+    
+    // Add
+    func preparingToDelete(nodes: [Node])
+    
+    // ADD
+    func preparingToDelete(imageItems: [ImageItem])
 }

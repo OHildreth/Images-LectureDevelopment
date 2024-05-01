@@ -55,6 +55,29 @@ class SelectionManager {
     }
     
     // ADD
+    func preparingToDelete(nodes: [Node]) {
+        // Next Clear out any deleted Nodes
+        if nodes.count > 0 {
+            let remainingNodes = selectedNodes.subtracting(nodes)
+            selectedNodes = remainingNodes
+            return
+        }
+
+    }
+    
+    // ADD
+    func preparingToDelete(imageItems: [ImageItem]) {
+        // Next Clear out any deleted Nodes
+        if imageItems.count > 0 {
+            let imageItemIDsToDeleted = imageItems.map( {$0.id} )
+            
+            let remiainingIds = selectedImageItemIDs.subtracting(imageItemIDsToDeleted)
+            selectedImageItemIDs = remiainingIds
+            return
+        }
+    }
+    
+    // ADD Menu
     func deselectAll() {
         selectedImageItemIDs = []
         selectedNodes = []

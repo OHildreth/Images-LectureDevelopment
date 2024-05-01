@@ -10,30 +10,19 @@ import SwiftData
 
 struct ItemsTable: View {
     
-    // REMOVE
-    //var items: [ImageItem]
-    
-    // REMOVE
-    //@Bindable var selectionManager: SelectionManager
-    
-    // REMOVE
-    //@State private var sortOrder = [KeyPathComparator(\ImageItem.name)]
-    
     @Bindable var imageContentVM: ImageContentViewModel
     
-    // TODO: Add Delete
-    
     var body: some View {
-        // UPDATE in 3 places
-        Table(imageContentVM.imageItems,
-              selection: $imageContentVM.selection, 
+        // UPDATE in 2 places
+        // remove: imageContentVM.imageItems
+        Table(selection: $imageContentVM.selection,
               sortOrder: $imageContentVM.sort) {
             TableColumn("Name", value: \.name)
             
-
+            
             TableColumn("Folder", value: \.nodeName)
-  
-            TableColumn("File Size", value: \.fileSize) {              
+            
+            TableColumn("File Size", value: \.fileSize) {
                 Text($0.scaledFileSize)
             }
             
@@ -52,7 +41,16 @@ struct ItemsTable: View {
                 },
                        label: {Image(systemName: "link")})
             }
-            
+        }
+        // ADD
+    rows: {
+        ForEach(imageContentVM.imageItems) { imageItem in
+            TableRow(imageItem)
+                .contextMenu {
+                    Button("Delete") { imageContentVM.deleteSelectedImages() }
+                        .disabled(imageContentVM.selection.count == 0)
+                }
+            }
         }
     }
 }

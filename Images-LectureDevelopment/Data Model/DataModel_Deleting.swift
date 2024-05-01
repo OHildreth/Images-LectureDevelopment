@@ -11,6 +11,9 @@ import Foundation
 extension DataModel {
     
     func delete(_ nodes: [Node]) {
+        // ADD
+        delegate?.preparingToDelete(nodes: nodes)
+        
         for nextNode in nodes {
             modelContext.delete(nextNode)
         }
@@ -21,6 +24,10 @@ extension DataModel {
     
     // ADD Menu
     func delete(_ imageItems: [ImageItem]) {
+        
+        // ADD
+        delegate?.preparingToDelete(imageItems: imageItems)
+        
         for nextItem in imageItems {
             modelContext.delete(nextItem)
         }
@@ -32,7 +39,16 @@ extension DataModel {
     
     // ADD Menu
     func delete(_ imageItems: [ImageItem], andThenTheNodes nodes: [Node]) {
-        delete(imageItems)
-        delete(nodes)
+        
+        // It is important to delete the ImageItems first so that the selection manager removes the image items from the selection.
+        if imageItems.count > 0 {
+            delete(imageItems)
+            return
+        }
+        
+        if nodes.count > 0 {
+            delete(nodes)
+            return
+        }
     }
 }

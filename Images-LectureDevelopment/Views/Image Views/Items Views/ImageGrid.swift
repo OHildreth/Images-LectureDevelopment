@@ -32,6 +32,11 @@ struct ImageGrid: View {
                         }
                         Text(imageItem.name)
                     }
+                    // ADD
+                    .contextMenu {
+                        Button("Delete") { imageContentVM.deleteSelectedImages() }
+                            .disabled(imageContentVM.selection.count == 0)
+                    }
                     
                     .padding()
                     /*

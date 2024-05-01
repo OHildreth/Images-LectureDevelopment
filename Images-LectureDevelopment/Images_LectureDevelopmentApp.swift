@@ -10,6 +10,9 @@ import SwiftData
 
 @main
 struct Images_LectureDevelopmentApp: App {
+    
+    // ADD
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     @State var appController = AppController()
 

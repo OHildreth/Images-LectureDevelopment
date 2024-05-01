@@ -47,10 +47,23 @@ class AppController {
 
 // ADD
 extension AppController: DataModelDelegate {
+    
     func newData(nodes: [Node], andImages imageItems: [ImageItem]) {
         // Pass the information down to the Selection Manager because the selectionManager is responsible for knowing how selection state should be udpated
         selectionManager.newData(nodes: nodes, andImages: imageItems)
     }
+    
+    
+    // ADD
+    
+    func preparingToDelete(nodes: [Node]) {
+        selectionManager.preparingToDelete(nodes: nodes)
+    }
+    
+    func preparingToDelete(imageItems: [ImageItem]) {
+        selectionManager.preparingToDelete(imageItems: imageItems)
+    }
+        
 }
 
 
